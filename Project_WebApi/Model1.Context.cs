@@ -27,5 +27,8 @@ namespace Project_WebApi
     
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<flightdetail> flightdetails { get; set; }
+        public virtual DbSet<admin> admins { get; set; }
+        public virtual DbSet<flightseat> flightseats { get; set; }
+        public virtual DbSet<passengerdetail> passengerdetails { get; set; }
     }
 }

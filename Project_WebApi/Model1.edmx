@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="20" />
+          <Property Name="sec_qust" Type="varchar" MaxLength="50" />
+          <Property Name="sec_ans" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="customer">
           <Key>
             <PropertyRef Name="username" />
@@ -34,9 +43,62 @@
           <Property Name="Price" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Date" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <EntityType Name="flightseat">
+          <Key>
+            <PropertyRef Name="Flight_id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Seat_no" />
+          </Key>
+          <Property Name="Flight_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Seat_no" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="passengerdetails">
+          <Key>
+            <PropertyRef Name="Passenger_id" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="20" />
+          <Property Name="Passenger_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Flight_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Gender" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Age" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Adhar_number" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Meal_preference" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Seat" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Amount" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="WaitingList" Type="int" />
+          <Property Name="No_of_Travellers" Type="int" />
+        </EntityType>
+        <Association Name="FK">
+          <End Role="flightdetails" Type="Self.flightdetails" Multiplicity="1" />
+          <End Role="passengerdetails" Type="Self.passengerdetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="flightdetails">
+              <PropertyRef Name="Flight_id" />
+              <PropertyRef Name="Date" />
+            </Principal>
+            <Dependent Role="passengerdetails">
+              <PropertyRef Name="Flight_id" />
+              <PropertyRef Name="Date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ProjectModelStoreContainer">
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="flightdetails" EntityType="Self.flightdetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="flightseat" EntityType="Self.flightseat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="passengerdetails" EntityType="Self.passengerdetails" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK" Association="Self.FK">
+            <End Role="flightdetails" EntitySet="flightdetails" />
+            <End Role="passengerdetails" EntitySet="passengerdetails" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -58,6 +120,13 @@
         <EntityContainer Name="ProjectEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="customers" EntityType="Self.customer" />
           <EntitySet Name="flightdetails" EntityType="ProjectModel.flightdetail" />
+          <EntitySet Name="admins" EntityType="ProjectModel.admin" />
+          <EntitySet Name="flightseats" EntityType="ProjectModel.flightseat" />
+          <EntitySet Name="passengerdetails" EntityType="ProjectModel.passengerdetail" />
+          <AssociationSet Name="FK" Association="ProjectModel.FK">
+            <End Role="flightdetail" EntitySet="flightdetails" />
+            <End Role="passengerdetail" EntitySet="passengerdetails" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="flightdetail">
           <Key>
@@ -74,7 +143,64 @@
           <Property Name="Total_Seats" Type="Int32" Nullable="false" />
           <Property Name="Price" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Date" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="passengerdetails" Relationship="ProjectModel.FK" FromRole="flightdetail" ToRole="passengerdetail" />
         </EntityType>
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="sec_qust" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sec_ans" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="flightseat">
+          <Key>
+            <PropertyRef Name="Flight_id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Seat_no" />
+          </Key>
+          <Property Name="Flight_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Seat_no" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="passengerdetail">
+          <Key>
+            <PropertyRef Name="Passenger_id" />
+          </Key>
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Passenger_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Flight_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Age" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Adhar_number" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Meal_preference" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Seat" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="WaitingList" Type="Int32" />
+          <Property Name="No_of_Travellers" Type="Int32" />
+          <NavigationProperty Name="flightdetail" Relationship="ProjectModel.FK" FromRole="passengerdetail" ToRole="flightdetail" />
+        </EntityType>
+        <Association Name="FK">
+          <End Type="ProjectModel.flightdetail" Role="flightdetail" Multiplicity="1" />
+          <End Type="ProjectModel.passengerdetail" Role="passengerdetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="flightdetail">
+              <PropertyRef Name="Flight_id" />
+              <PropertyRef Name="Date" />
+            </Principal>
+            <Dependent Role="passengerdetail">
+              <PropertyRef Name="Flight_id" />
+              <PropertyRef Name="Date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -108,6 +234,48 @@
                 <ScalarProperty Name="Departure" ColumnName="Departure" />
                 <ScalarProperty Name="Flight_name" ColumnName="Flight_name" />
                 <ScalarProperty Name="Flight_id" ColumnName="Flight_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="admins">
+            <EntityTypeMapping TypeName="ProjectModel.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="sec_ans" ColumnName="sec_ans" />
+                <ScalarProperty Name="sec_qust" ColumnName="sec_qust" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="flightseats">
+            <EntityTypeMapping TypeName="ProjectModel.flightseat">
+              <MappingFragment StoreEntitySet="flightseat">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Seat_no" ColumnName="Seat_no" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Flight_id" ColumnName="Flight_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="passengerdetails">
+            <EntityTypeMapping TypeName="ProjectModel.passengerdetail">
+              <MappingFragment StoreEntitySet="passengerdetails">
+                <ScalarProperty Name="No_of_Travellers" ColumnName="No_of_Travellers" />
+                <ScalarProperty Name="WaitingList" ColumnName="WaitingList" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Seat" ColumnName="Seat" />
+                <ScalarProperty Name="Meal_preference" ColumnName="Meal_preference" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Adhar_number" ColumnName="Adhar_number" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Flight_id" ColumnName="Flight_id" />
+                <ScalarProperty Name="Passenger_id" ColumnName="Passenger_id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

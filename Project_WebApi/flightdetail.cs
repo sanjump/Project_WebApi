@@ -14,6 +14,12 @@ namespace Project_WebApi
     
     public partial class flightdetail
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public flightdetail()
+        {
+            this.passengerdetails = new HashSet<passengerdetail>();
+        }
+    
         public string Flight_id { get; set; }
         public string Flight_name { get; set; }
         public string Departure { get; set; }
@@ -24,5 +30,8 @@ namespace Project_WebApi
         public int Total_Seats { get; set; }
         public string Price { get; set; }
         public string Date { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<passengerdetail> passengerdetails { get; set; }
     }
 }

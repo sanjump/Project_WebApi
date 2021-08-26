@@ -7,6 +7,10 @@
       <Diagram DiagramId="8f24877d13784e25b0eeac68d8af58b8" Name="Diagram1">
         <EntityTypeShape EntityType="ProjectModel.customer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectModel.flightdetail" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ProjectModel.admin" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ProjectModel.flightseat" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ProjectModel.passengerdetail" Width="1.5" PointX="5.625" PointY="7.375" />
+        <AssociationConnector Association="ProjectModel.FK" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
